@@ -23,11 +23,6 @@ typedef struct {
     Vec3 cached_ray_dir;
     bool ray_dir_dirty;
     
-    // FPS tracking
-    double fps_last_time;
-    int fps_frames;
-    int current_fps;
-    
     // Window state
     bool fullscreen;
     int windowed_width;

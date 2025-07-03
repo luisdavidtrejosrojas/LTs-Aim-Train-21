@@ -17,9 +17,6 @@ void game_state_init(void) {
     g_game.hit_animating = false;
     g_game.hit_animation_start = 0.0;
     g_game.ray_dir_dirty = true;
-    g_game.fps_last_time = 0.0;
-    g_game.fps_frames = 0;
-    g_game.current_fps = 0;
     g_game.fullscreen = false;
     g_game.windowed_width = WINDOW_WIDTH;
     g_game.windowed_height = WINDOW_HEIGHT;

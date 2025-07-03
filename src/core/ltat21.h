@@ -21,7 +21,4 @@
 #define MAX_TARGET_RADIUS 3.0f
 #define TARGET_SIZE_STEP 0.1f
 
-// Performance settings
-#define FPS_UPDATE_INTERVAL 0.25f
-
 #endif // LTAT21_H

@@ -37,19 +37,7 @@ int main() {
     spawn_target();
     
     // Main loop
-    g_game.fps_last_time = glfwGetTime();
-    
     while (!glfwWindowShouldClose(window)) {
-        // Update FPS counter
-        double current_time = glfwGetTime();
-        g_game.fps_frames++;
-        
-        if (current_time - g_game.fps_last_time >= FPS_UPDATE_INTERVAL) {
-            g_game.current_fps = (int)(g_game.fps_frames / (current_time - g_game.fps_last_time));
-            g_game.fps_frames = 0;
-            g_game.fps_last_time = current_time;
-        }
-        
         // Render
         render_frame();
         
