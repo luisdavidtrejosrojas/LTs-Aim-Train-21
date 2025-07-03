@@ -16,6 +16,8 @@ void game_state_init(void) {
     g_game.target_radius = 1.0f;
     g_game.hit_animating = false;
     g_game.hit_animation_start = 0.0;
+    g_game.show_volume = false;
+    g_game.volume_display_start = 0.0;
     g_game.ray_dir_dirty = true;
     g_game.fullscreen = false;
     g_game.windowed_width = WINDOW_WIDTH;

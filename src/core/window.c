@@ -148,11 +148,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     } else if (key == GLFW_KEY_MINUS && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
         float volume = sound_get_volume() - 0.1f;
         sound_set_volume(volume);
-        debug_print("Volume: %.0f%%\n", volume * 100.0f);
+        g_game.show_volume = true;
+        g_game.volume_display_start = glfwGetTime();
+        debug_print("Volume: %.0f%%\n", sound_get_volume() * 100.0f);
     } else if (key == GLFW_KEY_EQUAL && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
         float volume = sound_get_volume() + 0.1f;
         sound_set_volume(volume);
-        debug_print("Volume: %.0f%%\n", volume * 100.0f);
+        g_game.show_volume = true;
+        g_game.volume_display_start = glfwGetTime();
+        debug_print("Volume: %.0f%%\n", sound_get_volume() * 100.0f);
+    } else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+        // Toggle mute
+        static float saved_volume = 0.5f;
+        float current = sound_get_volume();
+        if (current > 0.0f) {
+            saved_volume = current;
+            sound_set_volume(0.0f);
+        } else {
+            sound_set_volume(saved_volume);
+        }
+        g_game.show_volume = true;
+        g_game.volume_display_start = glfwGetTime();
     }
 }
 

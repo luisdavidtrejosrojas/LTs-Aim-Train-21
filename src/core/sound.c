@@ -32,7 +32,7 @@ void sound_cleanup(void) {
 }
 
 void sound_play(SoundType type) {
-    if (!g_initialized) return;
+    if (!g_initialized || g_volume == 0.0f) return;
     
 #ifdef _WIN32
     const char* sound_file = NULL;
@@ -56,7 +56,7 @@ void sound_set_volume(float volume) {
     if (volume > 1.0f) volume = 1.0f;
     g_volume = volume;
     // Note: PlaySound doesn't support volume control
-    // You'd need a more advanced API for that
+    // The volume is tracked but only affects mute (0 = muted)
 }
 
 float sound_get_volume(void) {

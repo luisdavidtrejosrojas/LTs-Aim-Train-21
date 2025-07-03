@@ -19,6 +19,10 @@ typedef struct {
     bool hit_animating;
     double hit_animation_start;
     
+    // Volume display
+    bool show_volume;
+    double volume_display_start;
+    
     // Cached values
     Vec3 cached_ray_dir;
     bool ray_dir_dirty;
