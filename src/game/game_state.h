@@ -15,6 +15,10 @@ typedef struct {
     Vec3 target_pos;
     float target_radius;
     
+    // Hit animation
+    bool hit_animating;
+    double hit_animation_start;
+    
     // Cached values
     Vec3 cached_ray_dir;
     bool ray_dir_dirty;

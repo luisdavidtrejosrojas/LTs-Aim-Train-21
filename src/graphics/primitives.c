@@ -3,6 +3,7 @@
 #include "../core/ltat21.h"
 #include "../game/game_state.h"
 #include <GLFW/glfw3.h>
+#include <math.h>
 
 #if defined(_WIN32)
     #include <windows.h>
@@ -62,7 +63,36 @@ void draw_floor(void) {
 void draw_target(void) {
     glPushMatrix();
     glTranslatef(g_game.target_pos.x, g_game.target_pos.y, g_game.target_pos.z);
-    glColor3f(0.0f, 1.0f, 1.0f);
+    
+    float scale = 1.0f;
+    float r = 0.0f, g = 1.0f, b = 1.0f; // Default cyan color
+    
+    if (g_game.hit_animating) {
+        double current_time = glfwGetTime();
+        double elapsed = current_time - g_game.hit_animation_start;
+        const double ANIMATION_DURATION = 0.2; // 200ms
+        
+        if (elapsed < ANIMATION_DURATION) {
+            // Calculate animation progress (0 to 1)
+            float progress = (float)(elapsed / ANIMATION_DURATION);
+            
+            // Scale up then down
+            scale = 1.0f + 0.5f * sinf(progress * 3.14159f);
+            
+            // Flash to white then fade
+            float flash = 1.0f - progress;
+            r = flash;
+            g = 1.0f;
+            b = flash + (1.0f - flash) * 1.0f; // Fade from white to cyan
+        } else {
+            // Animation complete
+            g_game.hit_animating = false;
+            spawn_target();
+        }
+    }
+    
+    glScalef(scale, scale, scale);
+    glColor3f(r, g, b);
     gluSphere(sphere_quad, g_game.target_radius, SPHERE_SLICES, SPHERE_STACKS);
     glPopMatrix();
 }

@@ -14,6 +14,8 @@ void game_state_init(void) {
     g_game.target_pos.y = 0.0f;
     g_game.target_pos.z = -7.0f;
     g_game.target_radius = 1.0f;
+    g_game.hit_animating = false;
+    g_game.hit_animation_start = 0.0;
     g_game.ray_dir_dirty = true;
     g_game.fps_last_time = 0.0;
     g_game.fps_frames = 0;

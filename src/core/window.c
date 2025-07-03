@@ -117,8 +117,9 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        if (check_hit()) {
-            spawn_target();
+        if (check_hit() && !g_game.hit_animating) {
+            g_game.hit_animating = true;
+            g_game.hit_animation_start = glfwGetTime();
         }
     }
 }
