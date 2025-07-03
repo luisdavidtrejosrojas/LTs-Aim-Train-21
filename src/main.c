@@ -410,66 +410,6 @@ void draw_hud() {
     sprintf(fps_text, "FPS: %d", g_game.current_fps);
     render_text(10, 10, fps_text, 2.0f);
     
-    // Draw accuracy bar if we have shots
-    if (g_game.shots_fired > 0) {
-        float accuracy = (float)g_game.shots_hit / g_game.shots_fired;
-        float bar_fill = 200.0f * accuracy;
-        
-        // Draw accuracy text
-        char acc_text[32];
-        sprintf(acc_text, "%d%% ", (int)(accuracy * 100.0f));
-        glColor3f(0.0f, 1.0f, 0.0f);
-        render_text(10, 45, acc_text, 1.5f);
-        
-        // Draw accuracy bar
-        glBegin(GL_QUADS);
-            // Background
-            glColor3f(0.2f, 0.2f, 0.2f);
-            glVertex2f(60, 50);
-            glVertex2f(260, 50);
-            glVertex2f(260, 70);
-            glVertex2f(60, 70);
-            
-            // Green portion
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glVertex2f(60, 50);
-            glVertex2f(60 + bar_fill, 50);
-            glVertex2f(60 + bar_fill, 70);
-            glVertex2f(60, 70);
-            
-            // Red portion
-            glColor3f(1.0f, 0.0f, 0.0f);
-            glVertex2f(60 + bar_fill, 50);
-            glVertex2f(260, 50);
-            glVertex2f(260, 70);
-            glVertex2f(60 + bar_fill, 70);
-        glEnd();
-    }
-    
-    // Draw target size indicator
-    glColor3f(0.8f, 0.8f, 0.8f);  // Light gray
-    char size_text[32];
-    sprintf(size_text, "Size: %d", (int)(g_game.target_radius * 10));
-    render_text(10, 85, size_text, 1.5f);
-    
-    // Visual size indicator bar
-    float size_percent = (g_game.target_radius - MIN_TARGET_RADIUS) / (MAX_TARGET_RADIUS - MIN_TARGET_RADIUS);
-    glBegin(GL_QUADS);
-        // Background
-        glColor3f(0.2f, 0.2f, 0.2f);
-        glVertex2f(80, 90);
-        glVertex2f(180, 90);
-        glVertex2f(180, 100);
-        glVertex2f(80, 100);
-        
-        // Size indicator
-        glColor3f(0.5f, 0.5f, 1.0f);  // Light blue
-        glVertex2f(80, 90);
-        glVertex2f(80 + 100 * size_percent, 90);
-        glVertex2f(80 + 100 * size_percent, 100);
-        glVertex2f(80, 100);
-    glEnd();
-    
     // Restore state
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
