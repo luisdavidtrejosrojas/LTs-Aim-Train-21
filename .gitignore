@@ -16,6 +16,9 @@ release/
 debug/
 bin/
 
+# Assets (optional - remove this line if you want to commit sounds)
+assets/sounds/*.wav
+
 # IDE files
 .vscode/
 .vs/
@@ -38,4 +41,3 @@ desktop.ini
 libs/
 lib/
 include/glfw/
-NUL

@@ -8,14 +8,22 @@
     #include <mmsystem.h>
 #endif
 
-// For now, we'll use simple beeps on Windows
-// Cross-platform sound requires external libraries
-
 static float g_volume = 0.5f;
 static bool g_initialized = false;
 
+// Sound file paths
+static const char* HIT_SOUND_PATH = "assets/sounds/hit.wav";
+static const char* MISS_SOUND_PATH = "assets/sounds/miss.wav";
+
 bool sound_init(void) {
     g_initialized = true;
+    
+#ifdef _WIN32
+    // Pre-load sounds to avoid first-play delay
+    PlaySound(HIT_SOUND_PATH, NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+    PlaySound(NULL, NULL, 0); // Stop it immediately
+#endif
+    
     return true;
 }
 
@@ -27,19 +35,18 @@ void sound_play(SoundType type) {
     if (!g_initialized) return;
     
 #ifdef _WIN32
-    // Simple Windows beeps for now
+    const char* sound_file = NULL;
+    
     if (type == SOUND_HIT) {
-        // Higher pitch for hit (880 Hz)
-        Beep(880, 100);
+        sound_file = HIT_SOUND_PATH;
     } else if (type == SOUND_MISS) {
-        // Lower pitch for miss (220 Hz)
-        Beep(220, 50);
+        sound_file = MISS_SOUND_PATH;
     }
-#else
-    // On other platforms, we'd need a proper audio library
-    // For now, just print to debug
-    if (type == SOUND_HIT) {
-        // Could use printf("\a") for terminal beep, but it's annoying
+    
+    if (sound_file) {
+        // SND_ASYNC plays without blocking
+        // SND_NODEFAULT prevents system beep if file not found
+        PlaySound(sound_file, NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
     }
 #endif
 }
@@ -48,12 +55,14 @@ void sound_set_volume(float volume) {
     if (volume < 0.0f) volume = 0.0f;
     if (volume > 1.0f) volume = 1.0f;
     g_volume = volume;
+    // Note: PlaySound doesn't support volume control
+    // You'd need a more advanced API for that
 }
 
 float sound_get_volume(void) {
     return g_volume;
 }
 
-// These are no longer needed with the simple implementation
+// These are no longer needed
 void sound_generate_hit(void) {}
 void sound_generate_miss(void) {}
