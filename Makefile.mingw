@@ -19,6 +19,6 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	-del /Q src\*.o src\utils\*.o ltat21.exe 2>NUL
+	-rm -f src/*.o src/utils/*.o ltat21.exe
 
 .PHONY: all clean
