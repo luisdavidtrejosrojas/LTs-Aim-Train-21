@@ -30,7 +30,7 @@ bool primitives_init(void) {
     floor_display_list = glGenLists(1);
     glNewList(floor_display_list, GL_COMPILE);
     
-    glColor3f(0.1f, 0.1f, 0.1f);
+    glColor3f(0.2f, 0.2f, 0.2f); // Dark gray grid
     glBegin(GL_LINES);
     for (int i = -10; i <= 10; i++) {
         glVertex3f(-10.0f, -2.0f, (float)i);
@@ -65,7 +65,8 @@ void draw_target(void) {
     glTranslatef(g_game.target_pos.x, g_game.target_pos.y, g_game.target_pos.z);
     
     float scale = 1.0f;
-    float r = 0.0f, g = 1.0f, b = 1.0f; // Default cyan color
+    float outline_scale = 1.08f; // 8% larger for outline
+    bool flash_red = false;
     
     if (g_game.hit_animating) {
         double current_time = glfwGetTime();
@@ -77,13 +78,14 @@ void draw_target(void) {
             float progress = (float)(elapsed / ANIMATION_DURATION);
             
             // Scale up then down
-            scale = 1.0f + 0.5f * sinf(progress * 3.14159f);
+            float anim_factor = 1.0f + 0.5f * sinf(progress * 3.14159f);
+            scale *= anim_factor;
+            outline_scale *= anim_factor;
             
-            // Flash to white then fade
-            float flash = 1.0f - progress;
-            r = flash;
-            g = 1.0f;
-            b = flash + (1.0f - flash) * 1.0f; // Fade from white to cyan
+            // Flash red for first half of animation
+            if (progress < 0.5f) {
+                flash_red = true;
+            }
         } else {
             // Animation complete
             g_game.hit_animating = false;
@@ -91,9 +93,26 @@ void draw_target(void) {
         }
     }
     
-    glScalef(scale, scale, scale);
-    glColor3f(r, g, b);
+    // First pass: Draw outline (scaled up, front face culling)
+    glCullFace(GL_FRONT); // Show back faces only
+    glPushMatrix();
+    glScalef(outline_scale, outline_scale, outline_scale);
+    if (flash_red) {
+        glColor3f(1.0f, 0.0f, 0.0f); // Red flash on hit
+    } else {
+        glColor3f(1.0f, 1.0f, 1.0f); // White outline normally
+    }
     gluSphere(sphere_quad, g_game.target_radius, SPHERE_SLICES, SPHERE_STACKS);
+    glPopMatrix();
+    
+    // Second pass: Draw black sphere normally (back face culling)
+    glCullFace(GL_BACK); // Normal culling
+    glPushMatrix();
+    glScalef(scale, scale, scale);
+    glColor3f(0.0f, 0.0f, 0.0f); // Black sphere
+    gluSphere(sphere_quad, g_game.target_radius, SPHERE_SLICES, SPHERE_STACKS);
+    glPopMatrix();
+    
     glPopMatrix();
 }
 

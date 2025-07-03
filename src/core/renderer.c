@@ -23,7 +23,7 @@ float fov_rad;
 
 bool renderer_init(void) {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.05f, 0.05f, 0.05f, 1.0f); // Very dark gray background
     
     aspect_ratio = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
     fov_rad = FOV * 3.14159f / 180.0f;
