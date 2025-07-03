@@ -1,5 +1,6 @@
 #include "window.h"
 #include "ltat21.h"
+#include "sound.h"
 #include "../game/game_state.h"
 #include "../utils/debug.h"
 #include <stdio.h>
@@ -120,6 +121,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (check_hit() && !g_game.hit_animating) {
             g_game.hit_animating = true;
             g_game.hit_animation_start = glfwGetTime();
+            sound_play(SOUND_HIT);
+        } else if (!g_game.hit_animating) {
+            sound_play(SOUND_MISS);
         }
     }
 }
@@ -141,6 +145,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     } else if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
         toggle_fullscreen();
+    } else if (key == GLFW_KEY_MINUS && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        float volume = sound_get_volume() - 0.1f;
+        sound_set_volume(volume);
+        debug_print("Volume: %.0f%%\n", volume * 100.0f);
+    } else if (key == GLFW_KEY_EQUAL && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        float volume = sound_get_volume() + 0.1f;
+        sound_set_volume(volume);
+        debug_print("Volume: %.0f%%\n", volume * 100.0f);
     }
 }
 

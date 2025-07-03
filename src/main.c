@@ -7,6 +7,7 @@
 #include "core/ltat21.h"
 #include "core/window.h"
 #include "core/renderer.h"
+#include "core/sound.h"
 #include "game/game_state.h"
 #include "utils/debug.h"
 
@@ -33,6 +34,11 @@ int main() {
         return -1;
     }
     
+    // Initialize sound
+    if (!sound_init()) {
+        debug_print("Warning: Sound initialization failed, continuing without sound\n");
+    }
+    
     // Initial target spawn
     spawn_target();
     
@@ -47,6 +53,7 @@ int main() {
     }
     
     // Cleanup
+    sound_cleanup();
     renderer_cleanup();
     window_cleanup();
     debug_cleanup();

@@ -7,6 +7,7 @@ OpenGL 2.1 aim trainer.
 - Mouse: Look
 - Left Click: Shoot
 - Scroll: Target size
+- -/+: Volume control
 - F11: Fullscreen
 - ESC: Exit
 

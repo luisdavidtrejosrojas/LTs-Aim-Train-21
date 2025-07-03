@@ -7,7 +7,7 @@ TARGET = ltat21
 # Platform detection
 ifeq ($(OS),Windows_NT)
     TARGET := $(TARGET).exe
-    LIBS = -lglfw3 -lopengl32 -lglu32 -lgdi32
+    LIBS = -lglfw3 -lopengl32 -lglu32 -lgdi32 -lwinmm
 else
     UNAME := $(shell uname -s)
     ifeq ($(UNAME),Darwin)
@@ -21,6 +21,7 @@ endif
 SRCS = src/main.c \
        src/core/window.c \
        src/core/renderer.c \
+       src/core/sound.c \
        src/game/game_state.c \
        src/graphics/primitives.c \
        src/graphics/hud.c \
