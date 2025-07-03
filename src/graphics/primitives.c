@@ -113,21 +113,25 @@ void draw_crosshair(void) {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glLineWidth(2.0f);
-    
     const float cx = width * 0.5f;
     const float cy = height * 0.5f;
     
-    glBegin(GL_LINES);
-        glVertex2f(cx - 20, cy);
-        glVertex2f(cx - 5, cy);
-        glVertex2f(cx + 5, cy);
-        glVertex2f(cx + 20, cy);
-        glVertex2f(cx, cy - 20);
-        glVertex2f(cx, cy - 5);
-        glVertex2f(cx, cy + 5);
-        glVertex2f(cx, cy + 20);
+    // Draw black border (6x6 total)
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(cx - 3, cy - 3);
+        glVertex2f(cx + 3, cy - 3);
+        glVertex2f(cx + 3, cy + 3);
+        glVertex2f(cx - 3, cy + 3);
+    glEnd();
+    
+    // Draw white center (2x2)
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        glVertex2f(cx - 1, cy - 1);
+        glVertex2f(cx + 1, cy - 1);
+        glVertex2f(cx + 1, cy + 1);
+        glVertex2f(cx - 1, cy + 1);
     glEnd();
     
     glEnable(GL_CULL_FACE);
