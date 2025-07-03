@@ -5,7 +5,9 @@ CFLAGS = -Wall -O2 -std=c99
 TARGET = ltat21.exe
 LIBS = -lglfw3 -lopengl32 -lglu32 -lgdi32 -lwinmm
 
-SRCS = src/main.c
+SRCS = src/main.c \
+       src/utils/vec3.c \
+       src/utils/debug.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
@@ -17,6 +19,6 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del /Q $(subst /,\,$(OBJS)) $(TARGET)
+	-del /Q src\*.o src\utils\*.o ltat21.exe 2>NUL
 
 .PHONY: all clean

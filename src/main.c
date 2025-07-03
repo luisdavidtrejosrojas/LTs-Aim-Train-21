@@ -24,43 +24,10 @@
     #include <GL/glu.h>
 #endif
 
-// Game constants
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 768
-#define MOUSE_SENSITIVITY 0.003f
-#define FOV 90.0f
-#define SPHERE_SLICES 16  // Reduced from 32
-#define SPHERE_STACKS 16  // Reduced from 32
-#define MIN_TARGET_RADIUS 0.2f
-#define MAX_TARGET_RADIUS 3.0f
-#define TARGET_SIZE_STEP 0.1f
-
-// Debug settings
-#define DEBUG_LOG 0      // Disabled by default for performance
-#define VERBOSE_LOG 0    
-#define FPS_UPDATE_INTERVAL 0.25f  // Update FPS display 4 times per second
-
-#if DEBUG_LOG
-FILE* debug_file = NULL;
-#endif
-
-// Fast inline debug print
-static inline void debug_print(const char* format, ...) {
-#if DEBUG_LOG
-    va_list args;
-    va_start(args, format);
-    if (debug_file) {
-        vfprintf(debug_file, format, args);
-        fflush(debug_file);
-    }
-    va_end(args);
-#endif
-}
-
-// Vector3 structure
-typedef struct {
-    float x, y, z;
-} Vec3;
+// Project headers
+#include "core/ltat21.h"
+#include "utils/vec3.h"
+#include "utils/debug.h"
 
 // Global state
 GLFWwindow* window = NULL;
@@ -126,15 +93,6 @@ GameState g_game = {
     .windowed_y = 0
 };
 
-// Fast vector normalization
-static inline Vec3 vec3_normalize_fast(Vec3 v) {
-    float inv_len = 1.0f / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-    v.x *= inv_len;
-    v.y *= inv_len;
-    v.z *= inv_len;
-    return v;
-}
-
 // Get cached ray direction
 static inline Vec3 get_ray_direction() {
     if (g_game.ray_dir_dirty) {
@@ -154,7 +112,6 @@ static inline Vec3 get_ray_direction() {
 // Optimized ray-sphere intersection
 static inline bool ray_sphere_intersect_fast(Vec3 ray_dir, Vec3 sphere_center, float sphere_radius) {
     // Simplified for ray origin at (0,0,0)
-    float a = 1.0f;  // Ray direction is normalized
     float b = -2.0f * (ray_dir.x * sphere_center.x + 
                        ray_dir.y * sphere_center.y + 
                        ray_dir.z * sphere_center.z);
@@ -661,19 +618,7 @@ static inline void render() {
 }
 
 int main() {
-#if DEBUG_LOG
-    debug_file = fopen("aim_trainer_debug.log", "w");
-    if (debug_file) {
-        debug_print("=== Aim Trainer Debug Log ===\n");
-        debug_print("Controls:\n");
-        debug_print("  Mouse - Look around\n");
-        debug_print("  Left Click - Shoot\n");
-        debug_print("  Scroll Wheel - Adjust target size\n");
-        debug_print("  R - Reset stats\n");
-        debug_print("  F11 - Toggle fullscreen\n");
-        debug_print("  ESC - Exit\n\n");
-    }
-#endif
+    debug_init();
     
     srand((unsigned int)time(NULL));
     srand((unsigned int)time(NULL));
@@ -741,9 +686,7 @@ int main() {
     glfwDestroyWindow(window);
     glfwTerminate();
     
-#if DEBUG_LOG
-    if (debug_file) fclose(debug_file);
-#endif
+    debug_cleanup();
     
     return 0;
 }
