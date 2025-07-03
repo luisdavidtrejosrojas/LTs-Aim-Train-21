@@ -33,6 +33,11 @@ typedef struct {
     int windowed_height;
     int windowed_x;
     int windowed_y;
+    
+    // Pause state
+    bool paused;
+    double pause_mouse_x;
+    double pause_mouse_y;
 } GameState;
 
 extern GameState g_game;

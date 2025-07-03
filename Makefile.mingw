@@ -12,6 +12,7 @@ SRCS = src/main.c \
        src/game/game_state.c \
        src/graphics/primitives.c \
        src/graphics/hud.c \
+       src/graphics/pause_menu.c \
        src/utils/vec3.c \
        src/utils/debug.c
 OBJS = $(SRCS:.c=.o)

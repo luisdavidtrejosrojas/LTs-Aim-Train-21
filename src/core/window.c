@@ -2,6 +2,7 @@
 #include "ltat21.h"
 #include "sound.h"
 #include "../game/game_state.h"
+#include "../graphics/pause_menu.h"
 #include "../utils/debug.h"
 #include <stdio.h>
 
@@ -94,6 +95,12 @@ void toggle_fullscreen(void) {
 
 // Callbacks
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (g_game.paused) {
+        // Update pause menu hover state
+        pause_menu_update(xpos, ypos);
+        return;
+    }
+    
     if (g_game.first_mouse) {
         g_game.last_mouse_x = xpos;
         g_game.last_mouse_y = ypos;
@@ -118,6 +125,31 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        if (g_game.paused) {
+            // Handle menu click
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            MenuButton clicked = pause_menu_handle_click(xpos, ypos);
+            
+            switch (clicked) {
+                case BUTTON_RESUME:
+                    g_game.paused = false;
+                    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                    g_game.first_mouse = true;
+                    break;
+                case BUTTON_QUIT:
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+                    break;
+                case BUTTON_SETTINGS:
+                    // Placeholder - just play a sound for now
+                    sound_play(SOUND_HIT);
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+        
         if (check_hit() && !g_game.hit_animating) {
             g_game.hit_animating = true;
             g_game.hit_animation_start = glfwGetTime();
@@ -142,7 +174,17 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        if (!g_game.paused) {
+            // Pause the game
+            g_game.paused = true;
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            glfwGetCursorPos(window, &g_game.pause_mouse_x, &g_game.pause_mouse_y);
+        } else {
+            // Unpause
+            g_game.paused = false;
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            g_game.first_mouse = true;
+        }
     } else if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
         toggle_fullscreen();
     } else if (key == GLFW_KEY_MINUS && (action == GLFW_PRESS || action == GLFW_REPEAT)) {

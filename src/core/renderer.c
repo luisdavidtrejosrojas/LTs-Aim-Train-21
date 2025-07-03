@@ -4,6 +4,7 @@
 #include "../game/game_state.h"
 #include "../graphics/primitives.h"
 #include "../graphics/hud.h"
+#include "../graphics/pause_menu.h"
 #include <GLFW/glfw3.h>
 
 #if defined(_WIN32)
@@ -47,6 +48,9 @@ bool renderer_init(void) {
     // Initialize graphics subsystems
     if (!primitives_init()) return false;
     
+    // Initialize pause menu
+    pause_menu_init();
+    
     return true;
 }
 
@@ -69,4 +73,9 @@ void render_frame(void) {
     // Draw 2D overlay
     draw_crosshair();
     draw_hud();
+    
+    // Draw pause menu if paused
+    if (g_game.paused) {
+        draw_pause_menu();
+    }
 }
