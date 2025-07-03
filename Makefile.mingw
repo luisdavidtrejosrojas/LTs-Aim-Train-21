@@ -6,6 +6,11 @@ TARGET = ltat21.exe
 LIBS = -lglfw3 -lopengl32 -lglu32 -lgdi32 -lwinmm
 
 SRCS = src/main.c \
+       src/core/window.c \
+       src/core/renderer.c \
+       src/game/game_state.c \
+       src/graphics/primitives.c \
+       src/graphics/hud.c \
        src/utils/vec3.c \
        src/utils/debug.c
 OBJS = $(SRCS:.c=.o)
@@ -19,6 +24,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	-rm -f src/*.o src/utils/*.o ltat21.exe
+	@echo Cleaning...
+	@del /Q src\*.o src\core\*.o src\game\*.o src\graphics\*.o src\utils\*.o ltat21.exe 2>NUL || echo Clean complete
 
 .PHONY: all clean

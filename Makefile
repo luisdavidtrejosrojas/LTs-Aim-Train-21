@@ -19,6 +19,11 @@ endif
 
 # Source files
 SRCS = src/main.c \
+       src/core/window.c \
+       src/core/renderer.c \
+       src/game/game_state.c \
+       src/graphics/primitives.c \
+       src/graphics/hud.c \
        src/utils/vec3.c \
        src/utils/debug.c
 
