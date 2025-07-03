@@ -1,0 +1,40 @@
+# Build outputs
+*.o
+*.obj
+*.exe
+ltat21
+ltat21.exe
+
+# Debug files
+*.log
+*.pdb
+*.ilk
+
+# Build directories
+build/
+release/
+debug/
+bin/
+
+# IDE files
+.vscode/
+.vs/
+*.suo
+*.user
+*.sln
+*.vcxproj*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Dependencies
+libs/
+lib/
+include/glfw/

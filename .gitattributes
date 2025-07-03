@@ -1,2 +1,37 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Source files
+*.c text
+*.h text
+
+# Build files
+Makefile text
+Makefile.* text
+*.mk text
+
+# Documentation
+*.md text
+*.txt text
+LICENSE text
+README text
+
+# Windows files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Unix files
+*.sh text eol=lf
+
+# Binary files
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.a binary
+*.lib binary
+*.o binary
+*.obj binary
+*.png binary
+*.jpg binary
+*.ico binary
