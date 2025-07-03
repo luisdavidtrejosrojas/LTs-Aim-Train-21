@@ -1,4 +1,4 @@
-// aim_trainer_optimized.c - Optimized OpenGL 2.1 FPS Aim Trainer
+// LT's Aim Train 21 - OpenGL 2.1 FPS Aim Trainer
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -53,10 +53,6 @@ typedef struct {
     Vec3 target_pos;
     float target_radius;
     
-    // Stats
-    int shots_fired;
-    int shots_hit;
-    
     // Cached values
     Vec3 cached_ray_dir;
     bool ray_dir_dirty;
@@ -80,8 +76,6 @@ GameState g_game = {
     .first_mouse = true,
     .target_pos = {0.0f, 0.0f, -7.0f},
     .target_radius = 1.0f,
-    .shots_fired = 0,
-    .shots_hit = 0,
     .ray_dir_dirty = true,
     .fps_last_time = 0.0,
     .fps_frames = 0,
@@ -187,7 +181,7 @@ void init_opengl() {
     glCullFace(GL_BACK);
     
     // Set window title once
-    glfwSetWindowTitle(window, "OpenGL 2.1 Aim Trainer");
+    glfwSetWindowTitle(window, LTAT21_NAME);
 }
 
 // Draw crosshair (optimized)
@@ -339,31 +333,6 @@ void render_char(float x, float y, char c, float scale) {
             glVertex2f(3, 2); glVertex2f(3, 3);
             glVertex2f(3, 5); glVertex2f(3, 6);
             break;
-        case 'i':
-            glVertex2f(3, 2); glVertex2f(3, 8);
-            break;
-        case 'z':
-            glVertex2f(0, 0); glVertex2f(6, 0);
-            glVertex2f(6, 0); glVertex2f(0, 8);
-            glVertex2f(0, 8); glVertex2f(6, 8);
-            break;
-        case 'e':
-            glVertex2f(0, 0); glVertex2f(0, 8);
-            glVertex2f(0, 0); glVertex2f(5, 0);
-            glVertex2f(0, 4); glVertex2f(4, 4);
-            glVertex2f(0, 8); glVertex2f(5, 8);
-            break;
-        case '%':
-            glVertex2f(0, 0); glVertex2f(0, 3);
-            glVertex2f(0, 0); glVertex2f(1, 0);
-            glVertex2f(1, 0); glVertex2f(1, 3);
-            glVertex2f(0, 3); glVertex2f(1, 3);
-            glVertex2f(1, 3); glVertex2f(5, 5);
-            glVertex2f(5, 5); glVertex2f(5, 8);
-            glVertex2f(5, 5); glVertex2f(6, 5);
-            glVertex2f(6, 5); glVertex2f(6, 8);
-            glVertex2f(5, 8); glVertex2f(6, 8);
-            break;
         case ' ':
             // Space - no drawing needed
             break;
@@ -420,8 +389,6 @@ void draw_hud() {
     glMatrixMode(GL_MODELVIEW);
 }
 
-
-
 // Spawn target
 void spawn_target() {
     Vec3 new_pos;
@@ -475,10 +442,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 // Mouse button callback
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        g_game.shots_fired++;
-        
         if (check_hit()) {
-            g_game.shots_hit++;
             spawn_target();
         }
     }
@@ -537,9 +501,6 @@ void toggle_fullscreen() {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    } else if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-        g_game.shots_fired = 0;
-        g_game.shots_hit = 0;
     } else if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
         toggle_fullscreen();
     }
@@ -579,7 +540,6 @@ int main() {
     debug_init();
     
     srand((unsigned int)time(NULL));
-    srand((unsigned int)time(NULL));
     
     if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
@@ -592,7 +552,7 @@ int main() {
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
     
     window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 
-        "OpenGL 2.1 Aim Trainer (Optimized)", NULL, NULL);
+        LTAT21_NAME, NULL, NULL);
     
     if (!window) {
         fprintf(stderr, "Failed to create window\n");
