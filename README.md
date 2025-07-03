@@ -8,7 +8,6 @@ OpenGL 2.1 aim trainer.
 - Left Click: Shoot
 - Scroll: Target size
 - F11: Fullscreen
-- R: Reset stats
 - ESC: Exit
 
 ## Build
