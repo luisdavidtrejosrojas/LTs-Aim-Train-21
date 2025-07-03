@@ -484,9 +484,27 @@ void draw_hud() {
 
 // Spawn target
 void spawn_target() {
-    g_game.target_pos.x = (float)(rand() % 7 - 3) * 0.8f;
-    g_game.target_pos.y = (float)(rand() % 5 - 2) * 0.8f;
-    g_game.target_pos.z = -6.0f - (float)(rand() % 4);
+    Vec3 new_pos;
+    int attempts = 0;
+    const float min_distance = 2.0f; // Minimum distance from previous position
+    
+    do {
+        new_pos.x = (float)(rand() % 7 - 3) * 0.8f;
+        new_pos.y = (float)(rand() % 5 - 2) * 0.8f;
+        new_pos.z = -6.0f - (float)(rand() % 4);
+        
+        // Calculate distance from current position
+        float dx = new_pos.x - g_game.target_pos.x;
+        float dy = new_pos.y - g_game.target_pos.y;
+        float dz = new_pos.z - g_game.target_pos.z;
+        float distance = sqrtf(dx*dx + dy*dy + dz*dz);
+        
+        // If far enough or we've tried too many times, accept it
+        if (distance >= min_distance || attempts++ > 10) {
+            g_game.target_pos = new_pos;
+            break;
+        }
+    } while (1);
 }
 
 // Mouse callback
