@@ -68,7 +68,7 @@ void draw_target(void) {
     float outline_scale = 1.08f; // 8% larger for outline
     bool flash_red = false;
     
-    if (g_game.hit_animating && !g_game.paused) {  // Added pause check here
+    if (g_game.hit_animating && !g_game.paused) {  // Added pause check
         double current_time = glfwGetTime();
         double elapsed = current_time - g_game.hit_animation_start;
         const double ANIMATION_DURATION = 0.2; // 200ms

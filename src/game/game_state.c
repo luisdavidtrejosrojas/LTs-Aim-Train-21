@@ -24,6 +24,8 @@ void game_state_init(void) {
     g_game.windowed_height = WINDOW_HEIGHT;
     g_game.windowed_x = 0;
     g_game.windowed_y = 0;
+    
+    // Pause state initialization
     g_game.paused = false;
     g_game.pause_mouse_x = 0;
     g_game.pause_mouse_y = 0;

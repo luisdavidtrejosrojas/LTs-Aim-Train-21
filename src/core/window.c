@@ -42,6 +42,9 @@ bool window_init(void) {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // Disable VSync
     
+    // Set minimum window size to 1024x768
+    glfwSetWindowSizeLimits(window, 1024, 768, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    
     // Setup callbacks
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
